@@ -4,12 +4,75 @@ Firebase Cloud Messaging (FCM) is a cross-platform messaging solution that lets 
 
 This PHP SDK provides a clean and simple way to send push notifications with Firebase Cloud Messaging from your PHP applications.
 
-Please refer to Firebase Cloud Messaging documentation for further details on FCM features and options.
+[![Latest Stable Version](https://img.shields.io/packagist/v/volk/php-firebase-cloud-messaging.svg)](https://packagist.org/packages/volk/php-firebase-cloud-messaging)
+[![License](https://img.shields.io/packagist/l/volk/php-firebase-cloud-messaging.svg)](https://github.com/olucvolkan/fcm-php-sdk/blob/master/LICENSE)
+[![PHP Version](https://img.shields.io/packagist/php-v/volk/php-firebase-cloud-messaging.svg)](https://packagist.org/packages/volk/php-firebase-cloud-messaging)
+
+## Features
+
+- Compatible with PHP 7.1+ and Laravel 5.5+
+- Send notifications to single devices, multiple devices (up to 1000), or topics
+- Support for notification messages (visible) and data messages (invisible payload)
+- Configure message priority, time to live, and more
+- Laravel integration with auto-discovery and notification channel
+- Symfony integration
+- Easy to use and extend
 
 ## Installation
 
 ```bash
 composer require volk/php-firebase-cloud-messaging
+```
+
+## Laravel 5.5+ Integration
+
+This package supports Laravel 5.5+ with auto-discovery. Once you install the package, it will be automatically registered.
+
+Add your Firebase Server Key to your `.env` file:
+```
+FCM_SERVER_KEY=your_firebase_server_key_here
+```
+
+And add the configuration to `config/services.php`:
+```php
+'fcm' => [
+    'key' => env('FCM_SERVER_KEY'),
+],
+```
+
+Then you can use the Facade:
+```php
+use Firebase\CloudMessaging\Laravel\Facades\FCM;
+use Firebase\CloudMessaging\RequestResponse\Message;
+
+$message = new Message();
+$message->setNotification([...]);
+$response = FCM::send($message);
+```
+
+Or use the notification channel:
+```php
+// Create a notification class
+class PushNotification extends Notification
+{
+    public function via($notifiable)
+    {
+        return ['fcm'];
+    }
+    
+    public function toFcm($notifiable)
+    {
+        return (new Message())
+            ->setNotification([
+                'title' => 'Notification Title',
+                'body' => 'Notification Body',
+            ])
+            ->setToken($notifiable->fcm_token);
+    }
+}
+
+// Send the notification
+$user->notify(new PushNotification());
 ```
 
 ## Basic Usage
@@ -190,6 +253,14 @@ try {
 | failure        | integer     | Number of messages that could not be processed |
 | canonical_ids  | integer     | Number of results with canonical registration token |
 | results        | array       | Array of objects representing the status of each token |
+
+## Examples
+
+Check the `examples` directory for more detailed examples:
+- [Simple notification example](examples/simple_notification.php)
+- [Laravel integration example](examples/laravel_integration.php)
+- [Laravel 5.5 specific integration example](examples/laravel55_integration.php)
+- [Symfony integration example](examples/symfony_integration.php)
 
 ## Development & Contribution
 
