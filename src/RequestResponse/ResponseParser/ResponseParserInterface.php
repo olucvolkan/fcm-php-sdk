@@ -10,5 +10,5 @@ interface ResponseParserInterface
      * @param string $response
      * @return array|null
      */
-    public function parse(string $response): ?array;
+    public function parse($response);
 }
