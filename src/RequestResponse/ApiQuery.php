@@ -25,7 +25,7 @@ class ApiQuery implements ApiQueryInterface
      * @param string $value
      * @return $this
      */
-    public function addParam(string $key, string $value): self
+    public function addParam($key, $value)
     {
         $this->queryParams[$key] = $value;
         return $this;
@@ -36,7 +36,7 @@ class ApiQuery implements ApiQueryInterface
      * 
      * @return array
      */
-    public function getParams(): array
+    public function getParams()
     {
         return $this->queryParams;
     }
@@ -47,9 +47,9 @@ class ApiQuery implements ApiQueryInterface
      * @param string $key
      * @return string|null
      */
-    public function getParam(string $key): ?string
+    public function getParam($key)
     {
-        return $this->queryParams[$key] ?? null;
+        return isset($this->queryParams[$key]) ? $this->queryParams[$key] : null;
     }
 
     /**
@@ -57,7 +57,7 @@ class ApiQuery implements ApiQueryInterface
      * 
      * @return string
      */
-    public function getQueryString(): string
+    public function getQueryString()
     {
         return http_build_query($this->queryParams);
     }
