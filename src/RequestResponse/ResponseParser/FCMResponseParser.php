@@ -12,7 +12,7 @@ class FCMResponseParser implements ResponseParserInterface
      * @param string $response
      * @return array|null
      */
-    public function parse(string $response): ?array
+    public function parse($response)
     {
         if (empty($response)) {
             return null;
