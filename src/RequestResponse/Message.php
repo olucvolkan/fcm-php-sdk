@@ -3,6 +3,7 @@
 namespace Firebase\CloudMessaging\RequestResponse;
 
 use Firebase\CloudMessaging\Models\Priority;
+use Firebase\CloudMessaging\RequestResponse\Exception\InvalidMessageException;
 
 class Message
 {
@@ -34,7 +35,7 @@ class Message
     /**
      * @var string
      */
-    protected $priority = Priority::NORMAL;
+    protected $priority = null;
 
     /**
      * @var int|null
@@ -57,12 +58,20 @@ class Message
     protected $mutableContent = false;
 
     /**
+     * Message constructor
+     */
+    public function __construct()
+    {
+        $this->priority = Priority::NORMAL;
+    }
+
+    /**
      * Set notification parameters
      *
      * @param array $params
      * @return $this
      */
-    public function setNotification(array $params): self
+    public function setNotification(array $params)
     {
         $this->notification = $params;
         return $this;
@@ -74,7 +83,7 @@ class Message
      * @param array $data
      * @return $this
      */
-    public function setData(array $data): self
+    public function setData(array $data)
     {
         $this->data = $data;
         return $this;
@@ -86,7 +95,7 @@ class Message
      * @param string $token
      * @return $this
      */
-    public function setToken(string $token): self
+    public function setToken($token)
     {
         $this->token = $token;
         $this->tokens = null;
@@ -100,7 +109,7 @@ class Message
      * @param array $tokens
      * @return $this
      */
-    public function setTokens(array $tokens): self
+    public function setTokens(array $tokens)
     {
         $this->tokens = $tokens;
         $this->token = null;
@@ -114,7 +123,7 @@ class Message
      * @param string $topic
      * @return $this
      */
-    public function setTopic(string $topic): self
+    public function setTopic($topic)
     {
         $this->topic = $topic;
         $this->token = null;
@@ -128,7 +137,7 @@ class Message
      * @param string $priority
      * @return $this
      */
-    public function setPriority(string $priority): self
+    public function setPriority($priority)
     {
         $this->priority = $priority;
         return $this;
@@ -140,7 +149,7 @@ class Message
      * @param int $seconds
      * @return $this
      */
-    public function setTimeToLive(int $seconds): self
+    public function setTimeToLive($seconds)
     {
         $this->timeToLive = $seconds;
         return $this;
@@ -152,7 +161,7 @@ class Message
      * @param string $key
      * @return $this
      */
-    public function setCollapseKey(string $key): self
+    public function setCollapseKey($key)
     {
         $this->collapseKey = $key;
         return $this;
@@ -164,7 +173,7 @@ class Message
      * @param bool $contentAvailable
      * @return $this
      */
-    public function setContentAvailable(bool $contentAvailable = true): self
+    public function setContentAvailable($contentAvailable = true)
     {
         $this->contentAvailable = $contentAvailable;
         return $this;
@@ -176,19 +185,52 @@ class Message
      * @param bool $mutableContent
      * @return $this
      */
-    public function setMutableContent(bool $mutableContent = true): self
+    public function setMutableContent($mutableContent = true)
     {
         $this->mutableContent = $mutableContent;
         return $this;
     }
 
     /**
+     * Validate the message configuration
+     *
+     * @throws InvalidMessageException
+     */
+    public function validate()
+    {
+        // At least one targeting option must be set
+        if ($this->token === null && $this->tokens === null && $this->topic === null) {
+            throw new InvalidMessageException('No target specified. Must set token, tokens, or topic');
+        }
+        
+        // If tokens are set, must have at least one token and max 1000
+        if ($this->tokens !== null) {
+            if (empty($this->tokens)) {
+                throw new InvalidMessageException('Tokens array cannot be empty');
+            }
+            
+            if (count($this->tokens) > 1000) {
+                throw new InvalidMessageException('Too many tokens. Maximum is 1000');
+            }
+        }
+        
+        // At least one of notification or data must be set
+        if (empty($this->notification) && empty($this->data)) {
+            throw new InvalidMessageException('Message must contain at least one of: notification or data');
+        }
+    }
+
+    /**
      * Build FCM payload based on the configured options
      *
      * @return array
+     * @throws InvalidMessageException
      */
-    public function buildPayload(): array
+    public function buildPayload()
     {
+        // Validate the message
+        $this->validate();
+        
         $payload = [];
 
         // Add notification if set
