@@ -49,7 +49,7 @@ class ApiRequest implements ApiRequestInterface
     /**
      * @return string
      */
-    public function getUrl(): string
+    public function getUrl()
     {
         return $this->url;
     }
@@ -58,7 +58,7 @@ class ApiRequest implements ApiRequestInterface
      * @return ApiQueryInterface
      * @throws MissingApiQueryException
      */
-    public function getQuery(): ApiQueryInterface
+    public function getQuery()
     {
         if (empty($this->query)) {
             throw new MissingApiQueryException();
@@ -86,7 +86,7 @@ class ApiRequest implements ApiRequestInterface
     /**
      * @param string $postFields
      */
-    public function setPostFields(string $postFields)
+    public function setPostFields($postFields)
     {
         $this->postFields = $postFields;
     }
