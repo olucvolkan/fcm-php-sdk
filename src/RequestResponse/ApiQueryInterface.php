@@ -11,14 +11,14 @@ interface ApiQueryInterface
      * @param string $value
      * @return self
      */
-    public function addParam(string $key, string $value): self;
+    public function addParam($key, $value);
 
     /**
      * Get all query parameters
      * 
      * @return array
      */
-    public function getParams(): array;
+    public function getParams();
 
     /**
      * Get a specific parameter by key
@@ -26,12 +26,12 @@ interface ApiQueryInterface
      * @param string $key
      * @return string|null
      */
-    public function getParam(string $key): ?string;
+    public function getParam($key);
 
     /**
      * Get the formatted query string
      * 
      * @return string
      */
-    public function getQueryString(): string;
+    public function getQueryString();
 }
