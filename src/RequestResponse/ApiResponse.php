@@ -40,10 +40,10 @@ class ApiResponse implements ApiResponseInterface
      * @param string $errorMessage
      */
     public function __construct(
-        string $rawResponse, 
+        $rawResponse, 
         ResponseParserInterface $responseParser = null, 
-        int $statusCode = 200,
-        string $errorMessage = ''
+        $statusCode = 200,
+        $errorMessage = ''
     ) {
         $this->rawResponse = $rawResponse;
         $this->responseParser = $responseParser;
@@ -60,7 +60,7 @@ class ApiResponse implements ApiResponseInterface
      * 
      * @return int
      */
-    public function getStatusCode(): int
+    public function getStatusCode()
     {
         return $this->statusCode;
     }
@@ -70,7 +70,7 @@ class ApiResponse implements ApiResponseInterface
      * 
      * @return string
      */
-    public function getErrorMessage(): string
+    public function getErrorMessage()
     {
         return $this->errorMessage;
     }
@@ -80,7 +80,7 @@ class ApiResponse implements ApiResponseInterface
      * 
      * @return bool
      */
-    public function isSuccess(): bool
+    public function isSuccess()
     {
         return $this->statusCode >= 200 && $this->statusCode < 300 && empty($this->errorMessage);
     }
@@ -90,7 +90,7 @@ class ApiResponse implements ApiResponseInterface
      * 
      * @return string
      */
-    public function getRawResponse(): string
+    public function getRawResponse()
     {
         return $this->rawResponse;
     }
@@ -100,7 +100,7 @@ class ApiResponse implements ApiResponseInterface
      * 
      * @return array|null
      */
-    public function getResult(): ?array
+    public function getResult()
     {
         return $this->parsedResponse;
     }
