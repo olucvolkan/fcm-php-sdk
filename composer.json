@@ -1,0 +1,38 @@
+{
+  "name": "volk/php-firebase-cloud-messaging",
+  "description": "Firebase Cloud Messaging (FCM) SDK for PHP applications",
+  "keywords": [
+    "firebase",
+    "fcm",
+    "notifications",
+    "push-notifications",
+    "php"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Volkan Oluç",
+      "email": "volkanoluc@gmail.com"
+    }
+  ],
+  "type": "library",
+  "require": {
+    "php": ">=7.4",
+    "ext-curl": "*",
+    "ext-json": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Firebase\\CloudMessaging\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Firebase\\CloudMessaging\\Tests\\": "tests/"
+    }
+  },
+  "minimum-stability": "stable"
+}
