@@ -7,12 +7,12 @@ interface ApiRequestInterface
     /**
      * @return string
      */
-    public function getUrl(): string;
+    public function getUrl();
 
     /**
      * @return ApiQueryInterface
      */
-    public function getQuery(): ApiQueryInterface;
+    public function getQuery();
 
     /**
      * @param ApiQueryInterface $query
